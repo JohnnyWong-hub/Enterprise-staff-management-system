@@ -8,10 +8,10 @@ typedef struct employee
     char duty[10];
     char name[10];
     char sex[3];
-    unsigned char age;
+    unsigned int age;
     char edu[10];
     int salary;
-    char tel_fooice[10];
+    char tel_phone[10];
     char mobile[13];
     char qq[11];
     char address[31];
@@ -28,7 +28,7 @@ void delete (EMP *p);
 void according(EMP *p);
 void reset(EMP *p);
 void destory(EMP *p);
-
+void stringput(EMP *p);
 //系统密码初始化,超级管理员系统
 void systeminit()
 {
@@ -88,26 +88,117 @@ int menu()
 
 void insert(EMP *p)
 {
+    if (NULL == p)
+        return;
+    //创建一个员工信息一定要分配空间
+    int x = 0;
+    EMP *q = NULL;
+    while (1)
+    {
+        q = (EMP *)malloc(sizeof(EMP));
+        if (NULL == q)
+        {
+            printf("malloc failed\n");
+            destory(p);
+            exit(1);
+        }
+        printf("please input the employee's num, -1 to exit\n");
+        scanf("%d", &x);
+        while (getchar() != '\n')
+            ;
+        if (x == -1)
+        {
+            free(q);
+            break;
+        }
+        q->num = x;
+        printf("please input the employee's duty:");
+        scanf("%s", q->duty);
+        while (getchar() != '\n')
+            ;
+
+        printf("please input the employee's name:");
+        scanf("%s", q->name);
+        while (getchar() != '\n')
+            ;
+
+        printf("please input the employee's sex:");
+        scanf("%s", q->sex);
+        while (getchar() != '\n')
+            ;
+
+        printf("please input the employee's age:");
+        scanf("%d", &q->age);
+        while (getchar() != '\n')
+            ;
+
+        printf("please input the employee's edu:");
+        scanf("%s", q->edu);
+        while (getchar() != '\n')
+            ;
+
+        printf("please input the employee's salary:");
+        scanf("%d", &q->salary);
+        while (getchar() != '\n')
+            ;
+
+        printf("please input the employee's telphone:");
+        scanf("%s", q->tel_phone);
+        while (getchar() != '\n')
+            ;
+
+        printf("please input the employee's moblie:");
+        scanf("%s", q->mobile);
+        while (getchar() != '\n')
+            ;
+
+        printf("please input the employee's qq:");
+        scanf("%s", q->qq);
+        while (getchar() != '\n')
+            ;
+
+        printf("please input the employee's address:");
+        scanf("%s", q->address);
+        while (getchar() != '\n')
+            ;
+
+        q->next = p->next;
+        p->next = q;
+    }
 }
 
-void search(EMP *p) 
+void search(EMP *p)
 {
+    if (NULL == p)
+        return;
+    int x = 0;
+    EMP *q = p->next;
+    printf("Please input the number of employee you want to search:");
+    scanf("%d", &x);
+    while (getchar() != '\n')
+        ;
 
+    while (q)
+    {
+        if (q->num == x)
+        {
+            stringput(q);
+            break;
+        }
+        q = q->next;
+    }
 }
 
-void list(EMP *p) 
+void list(EMP *p)
 {
-
 }
 
-void change(EMP *p) 
+void change(EMP *p)
 {
-
 }
 
-void delete (EMP *p) 
+void delete (EMP *p)
 {
-
 }
 
 void according(EMP *p)
@@ -122,14 +213,34 @@ void destory(EMP *p)
 {
     if (NULL == p)
         return;
-    EMP *q = p->next;
+    EMP *q,*f;
+    f = p;
+    q = p->next;
+
     while (q)
     {
-        p = q->next;
-        free(q);
-        q = p->next;
+       f->next = q->next;
+       free(q);
+       q = f->next; 
     }
-    free(p);
+    free(f);
+    f = NULL;
+}
+
+void stringput(EMP *p)
+{
+    printf("|num:%d  |duty:%s  |name:%s  |sex:%s  |age:%d  |edu:%s  |salary:%d  |tel_phone:%s  |moblie:%s  |qq:%s  |address:%s  |\n",
+           p->num,
+           p->duty,
+           p->name,
+           p->sex,
+           p->age,
+           p->edu,
+           p->salary,
+           p->tel_phone,
+           p->mobile,
+           p->qq,
+           p->address);
 }
 
 int main(int argc, char const *argv[])
