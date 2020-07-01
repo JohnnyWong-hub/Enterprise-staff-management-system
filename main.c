@@ -35,7 +35,7 @@ void systeminit()
     FILE *fp;
     char buf[9];
     char pass[9];
-    //以读写追加的方式打开密码文件
+    //以读写的方式打开密码文件
     if ((fp = fopen("./mypasswd", "rb+")) == 0)
     {
         printf("Init failed system shutdown\n");
@@ -207,21 +207,40 @@ void according(EMP *p)
 
 void reset(EMP *p)
 {
+    FILE *fp;
+    char buf[9];
+    //以读写的方式打开密码文件
+    if ((fp = fopen("./mypasswd", "rb+")) == 0)
+    {
+        exit(-1);
+    }
+
+    do
+    {
+        printf("input the 8bit new passworrd\n");
+        scanf("%s", buf);
+    } while (strlen(buf) != 8);
+
+    if (fwrite(buf, 1, 8, fp) < 0)
+    {
+        perror("fwrite");
+    }
+    fclose(fp);
 }
 
 void destory(EMP *p)
 {
     if (NULL == p)
         return;
-    EMP *q,*f;
+    EMP *q, *f;
     f = p;
     q = p->next;
 
     while (q)
     {
-       f->next = q->next;
-       free(q);
-       q = f->next; 
+        f->next = q->next;
+        free(q);
+        q = f->next;
     }
     free(f);
     f = NULL;
